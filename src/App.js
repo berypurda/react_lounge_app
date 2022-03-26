@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom"
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom"
 import { useAuthContext } from "./hooks/useAuthContext"
 
 // styles
@@ -24,36 +24,30 @@ function App() {
           {user && <Sidebar />}
           <div className="container">
             <Navbar />
-            <Switch>
-              <Route exact path="/">
-                {!user && <Redirect to="/login" />}
-                {user && <Dashboard />}
-              </Route>
-            </Switch>
-            <Switch>
-              <Route path="/create">
-                {!user && <Redirect to="/login" />}
-                {user && <Create />}
-              </Route>
-            </Switch>
-            <Switch>
-              <Route path="/projects/:id">
-                {!user && <Redirect to="/login" />}
-                {user && <Project />}
-              </Route>
-            </Switch>
-            <Switch>
-              <Route path="/login">
-                {user && <Redirect to="/" />}
-                {!user && <Login />}
-              </Route>
-            </Switch>
-            <Switch>
-              <Route path="/signup">
-                {user && <Redirect to="/" />}
-                {!user && <Signup />}
-              </Route>
-            </Switch>
+            <Routes>
+              <Route
+                path="/"
+                element={user ? <Dashboard /> : <Navigate to="/login" />}
+              />
+              <Route
+                path="/create"
+                element={user ? <Create /> : <Navigate to="/login" />}
+              />
+
+              <Route
+                path="/projects/:id"
+                element={user ? <Project /> : <Navigate to="/login" />}
+              />
+
+              <Route
+                path="/login"
+                element={user ? <Navigate to="/" /> : <Login />}
+              />
+              <Route
+                path="/signup"
+                element={user ? <Navigate to="/" /> : <Signup />}
+              />
+            </Routes>
           </div>
           {user && <OnlineUsers />}
         </BrowserRouter>
